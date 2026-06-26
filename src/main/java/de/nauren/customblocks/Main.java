@@ -1,7 +1,11 @@
 package de.nauren.customblocks;
 
-import de.nauren.customblocks.events.*;
+import de.nauren.customblocks.events.BreakEvent;
+import de.nauren.customblocks.events.PistonMoveEvent;
+import de.nauren.customblocks.events.PlaceEvent;
+import de.nauren.customblocks.events.ResourcePackStatus;
 import de.nauren.customblocks.util.CommandManager;
+import de.nauren.customblocks.util.CustomBlockManager;
 import de.nauren.customblocks.util.FileManager;
 import de.nauren.customblocks.util.RegisterRecipes;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -10,29 +14,32 @@ import java.util.Objects;
 
 public final class Main extends JavaPlugin {
 
+    private FileManager fileManager;
+    private CustomBlockManager customBlockManager;
+
     @Override
     public void onEnable() {
-        // Plugin startup logic
-        FileManager fileManager = new FileManager(this);
+        fileManager = new FileManager(this);
+        customBlockManager = new CustomBlockManager(this, fileManager);
 
-        //Register custom block placement and break functions
-        getServer().getPluginManager().registerEvents(new PlaceEvent(), this);
-        getServer().getPluginManager().registerEvents(new BreakEvent(fileManager), this);
-        getServer().getPluginManager().registerEvents(new PistonMoveEvent(), this);
-
-        //Register resource pack functions
+        getServer().getPluginManager().registerEvents(new PlaceEvent(customBlockManager), this);
+        getServer().getPluginManager().registerEvents(new BreakEvent(fileManager, customBlockManager), this);
+        getServer().getPluginManager().registerEvents(new PistonMoveEvent(customBlockManager), this);
         getServer().getPluginManager().registerEvents(new ResourcePackStatus(fileManager), this);
 
-        //Register recipes
         RegisterRecipes.RegisterStonecutterRecipes(fileManager, this);
-        //Register commands
+
         CommandManager commandManager = new CommandManager(fileManager);
         Objects.requireNonNull(this.getCommand("cb")).setExecutor(commandManager);
         Objects.requireNonNull(this.getCommand("cb")).setTabCompleter(commandManager);
+
+        customBlockManager.rebuildIndex();
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        if (customBlockManager != null) {
+            customBlockManager.clearIndex();
+        }
     }
 }
