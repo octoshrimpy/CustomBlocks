@@ -12,7 +12,7 @@
   <name>CustomBlocks</name>
 
   <properties>
-    <java.version>21</java.version>
+    <java.version>25</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
@@ -50,7 +50,7 @@
 
   <repositories>
     <repository>
-      <id>papermc-repo</id>
+      <id>papermc</id>
       <url>https://repo.papermc.io/repository/maven-public/</url>
     </repository>
     <repository>
@@ -63,7 +63,7 @@
     <dependency>
       <groupId>io.papermc.paper</groupId>
       <artifactId>paper-api</artifactId>
-      <version>1.21.6-R0.1-SNAPSHOT</version>
+      <version>26.1.2.build.72-stable</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

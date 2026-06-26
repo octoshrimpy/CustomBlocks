@@ -1,7 +1,7 @@
 name: CustomBlocks
 version: '${project.version}'
 main: de.nauren.customblocks.Main
-api-version: '1.21'
+api-version: '26.1.2'
 commands:
   cb:
     description: Custom Block commands
